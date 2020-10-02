@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CRUD Demo 2</string>
+    <string name="save">Save</string>
 </resources>
