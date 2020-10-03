@@ -73,9 +73,18 @@ public class MainActivity extends AppCompatActivity{
                 Note note = documentSnapshot.toObject(Note.class);
                 String id  = documentSnapshot.getId();
 
-                Toast.makeText(MainActivity.this,
-                        "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(MainActivity.this,
+//                        "Position: " + position + " ID: " + id, Toast.LENGTH_SHORT)
+//                        .show();
+
+                Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+                assert note != null;
+                intent.putExtra("EXTRA_TITLE", note.getTitle());
+                intent.putExtra("EXTRA_DESCRIPTION", note.getDescription());
+                intent.putExtra("EXTRA_PRIORITY", note.getPriority());
+                intent.putExtra("EXTRA_ID", id);
+
+                startActivity(intent);
             }
         });
     }

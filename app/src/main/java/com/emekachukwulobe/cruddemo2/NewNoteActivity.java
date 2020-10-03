@@ -3,6 +3,7 @@ package com.emekachukwulobe.cruddemo2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,11 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class NewNoteActivity extends AppCompatActivity {
@@ -21,6 +25,9 @@ public class NewNoteActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private EditText editTextDescription;
     private NumberPicker numberPickerPriority;
+
+    boolean wannaEdit;
+    String editID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,19 @@ public class NewNoteActivity extends AppCompatActivity {
 
         numberPickerPriority.setMinValue(1);
         numberPickerPriority.setMaxValue(10);
+
+        wannaEdit = false;
+
+        if (getIntent().getStringExtra("EXTRA_ID") != null){
+            setTitle("Edit Note");
+
+            editTextTitle.setText(getIntent().getStringExtra("EXTRA_TITLE"));
+            editTextDescription.setText(getIntent().getStringExtra("EXTRA_DESCRIPTION"));
+            numberPickerPriority.setValue(getIntent().getIntExtra("EXTRA_PRIORITY",1));
+
+            wannaEdit = true;
+            editID = getIntent().getStringExtra("EXTRA_ID");
+        }
     }
 
     @Override
@@ -62,15 +82,30 @@ public class NewNoteActivity extends AppCompatActivity {
         int priority = numberPickerPriority.getValue();
 
         if (title.trim().isEmpty() || description.trim().isEmpty()){
-            // TODO Show toast
             Toast.makeText(this, "Please enter a title and description", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        CollectionReference notebookRef = FirebaseFirestore.getInstance()
-                .collection("Notebook");
-        notebookRef.add(new Note(title, description, priority));
-        Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show();
+        if (wannaEdit){
+            DocumentReference noteRef = FirebaseFirestore.getInstance()
+                    .collection("Notebook")
+                    .document(editID);
+
+            Map<String, Object> newNote = new HashMap<>();
+            newNote.put("title", title);
+            newNote.put("description", description);
+            newNote.put("priority", priority);
+
+            noteRef.update(newNote);
+
+            Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
+        } else {
+            CollectionReference notebookRef = FirebaseFirestore.getInstance()
+                    .collection("Notebook");
+            notebookRef.add(new Note(title, description, priority));
+            Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show();
+        }
+
         finish();
     }
 }
