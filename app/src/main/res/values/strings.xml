@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CRUD Demo 2</string>
+    <string name="app_name">Note Keeper</string>
     <string name="save">Save</string>
     <string name="sign_out">Sign out</string>
 
