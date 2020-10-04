@@ -83,10 +83,12 @@ public class NewNoteActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString();
         int priority = numberPickerPriority.getValue();
 
-        if (title.trim().isEmpty() || description.trim().isEmpty()){
-            Toast.makeText(this, "Please enter a title and description", Toast.LENGTH_SHORT).show();
+        if (description.trim().isEmpty()){
+            Toast.makeText(this, "Please enter description", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        title = title.trim().isEmpty() ? "-" : title;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
