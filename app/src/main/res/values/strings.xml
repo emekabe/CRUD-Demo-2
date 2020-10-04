@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">CRUD Demo 2</string>
     <string name="save">Save</string>
+    <string name="sign_out">Sign out</string>
+
+    <!-- Facebook -->
+    <string name="facebook_application_id" translatable="false">343402300230943</string>
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
+    <string name="facebook_login_protocol_scheme" translatable="false">fb343402300230943</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete_note">Delete Note</string>
 </resources>

@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,7 +44,7 @@ public class NewNoteActivity extends AppCompatActivity {
         numberPickerPriority = findViewById(R.id.number_picker_priority);
 
         numberPickerPriority.setMinValue(1);
-        numberPickerPriority.setMaxValue(10);
+        numberPickerPriority.setMaxValue(3);
 
         wannaEdit = false;
 
@@ -86,8 +88,13 @@ public class NewNoteActivity extends AppCompatActivity {
             return;
         }
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+
         if (wannaEdit){
             DocumentReference noteRef = FirebaseFirestore.getInstance()
+                    .collection("UserNotes")
+                    .document(user.getUid())
                     .collection("Notebook")
                     .document(editID);
 
@@ -101,6 +108,8 @@ public class NewNoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
         } else {
             CollectionReference notebookRef = FirebaseFirestore.getInstance()
+                    .collection("UserNotes")
+                    .document(user.getUid())
                     .collection("Notebook");
             notebookRef.add(new Note(title, description, priority));
             Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show();
