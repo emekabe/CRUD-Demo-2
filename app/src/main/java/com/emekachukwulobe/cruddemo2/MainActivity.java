@@ -1,6 +1,7 @@
 package com.emekachukwulobe.cruddemo2;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +19,20 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 
@@ -147,12 +154,71 @@ private CollectionReference notebookRef;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch ((item.getItemId())) {
+            case R.id.create_new_note:
+                startActivity(new Intent(MainActivity.this, NewNoteActivity.class));
+                return true;
+            case R.id.delete_all_notes:
+                deleteAllNotes();
+                return true;
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
             case R.id.sign_out:
                 signOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void deleteAllNotes() {
+        // TODO: write code to delete all notes here
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+
+        DocumentReference allNotesRef = FirebaseFirestore.getInstance()
+                .collection("UserNotes")
+                .document(user.getUid());
+
+        CollectionReference collectionReference = FirebaseFirestore.getInstance()
+                .collection("UserNotes")
+                .document(user.getUid())
+                .collection("Notebook");
+
+        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    documentSnapshot.getReference().delete();
+                }
+                Toast.makeText(MainActivity.this, "Deleted all notes successfully", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this,
+                        "An error occurred. Couldn't delete all notes.\n" + e.getMessage(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+
+//        allNotesRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toast.makeText(MainActivity.this, "Deleted all notes successfully", Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(MainActivity.this,
+//                        "An error occurred. Couldn't delete all notes.\n" + e.getMessage(),
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+//            }
+//        });
     }
 
     private void signOut() {

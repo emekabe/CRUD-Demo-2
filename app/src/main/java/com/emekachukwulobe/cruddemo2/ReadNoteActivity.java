@@ -37,6 +37,8 @@ public class ReadNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_note);
 
+        setTitle("Note");
+
         textViewTitleRead = findViewById(R.id.text_view_title_read);
         textViewPriorityRead = findViewById(R.id.text_view_priority_read);
         textViewDescriptionRead = findViewById(R.id.text_view_description_read);

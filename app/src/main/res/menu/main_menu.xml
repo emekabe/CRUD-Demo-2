@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/create_new_note"
+        android:title="Create new note" />
+
+    <item android:id="@+id/delete_all_notes"
+        android:title="Delete all notes" />
+
+    <item android:id="@+id/about"
+        android:title="About" />
+
     <item android:id="@+id/sign_out"
         android:title="@string/sign_out" />
+
 </menu>
