@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/note_background"
     android:foreground="?attr/selectableItemBackground"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
@@ -33,7 +34,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:textColor="@color/colorAccent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
         <TextView
             android:id="@+id/text_view_description"

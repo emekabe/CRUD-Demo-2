@@ -1,11 +1,13 @@
 package com.emekachukwulobe.cruddemo2;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -41,7 +43,22 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
 
         holder.textViewTime.setText(mySpecialDTFormat);
 
-
+        if (model.getPriority() == 3){
+            holder.noteBackground.setCardBackgroundColor(Color.rgb(255, 219, 219));
+            holder.textViewPriority.setText(R.string.critical);
+            holder.textViewPriority.setTextColor(Color.rgb(243, 0, 0));
+            holder.textViewTime.setTextColor(Color.rgb(243, 0, 0));
+        } else if (model.getPriority() == 2) {
+            holder.noteBackground.setCardBackgroundColor(Color.rgb(255, 254, 219));
+            holder.textViewPriority.setText(R.string.important);
+            holder.textViewPriority.setTextColor(Color.rgb(134, 138, 0));
+            holder.textViewTime.setTextColor(Color.rgb(134, 138, 0));
+        } else {
+            holder.noteBackground.setCardBackgroundColor(Color.rgb(219, 255, 251));
+            holder.textViewPriority.setText(R.string.normal);
+            holder.textViewPriority.setTextColor(Color.rgb(0, 163, 243));
+            holder.textViewTime.setTextColor(Color.rgb(0, 163, 243));
+        }
 
     }
 
@@ -63,12 +80,16 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
         TextView textViewPriority;
         TextView textViewTime;
 
+        CardView noteBackground;
+
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
             textViewTime = itemView.findViewById(R.id.text_view_time);
+
+            noteBackground = itemView.findViewById(R.id.note_background);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

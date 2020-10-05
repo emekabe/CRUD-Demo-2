@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +27,12 @@ import java.util.Date;
 
 public class ReadNoteActivity extends AppCompatActivity {
 
+    RelativeLayout readNoteBackground;
+
     TextView textViewTitleRead;
     TextView textViewPriorityRead;
     TextView textViewDescriptionRead;
     TextView textViewTimeRead;
-
 
     String editID;
 
@@ -46,6 +49,8 @@ public class ReadNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_note);
 
         setTitle("Note");
+
+        readNoteBackground = findViewById(R.id.read_note_background);
 
         textViewTitleRead = findViewById(R.id.text_view_title_read);
         textViewPriorityRead = findViewById(R.id.text_view_priority_read);
@@ -69,6 +74,25 @@ public class ReadNoteActivity extends AppCompatActivity {
                     + " - "
                     + DateFormat.getDateInstance(DateFormat.MONTH_FIELD).format(timeStamp);
             textViewTimeRead.setText(mySpecialDTFormat);
+
+            if (priority == 3){
+                readNoteBackground.setBackgroundColor(Color.rgb(255, 219, 219));
+                textViewPriorityRead.setText(R.string.critical);
+                textViewPriorityRead.setTextColor(Color.rgb(243, 0, 0));
+                textViewTimeRead.setTextColor(Color.rgb(243, 0, 0));
+            } else if (priority == 2) {
+                readNoteBackground.setBackgroundColor(Color.rgb(255, 254, 219));
+                textViewPriorityRead.setText(R.string.important);
+                textViewPriorityRead.setTextColor(Color.rgb(134, 138, 0));
+                textViewTimeRead.setTextColor(Color.rgb(134, 138, 0));
+            } else {
+                readNoteBackground.setBackgroundColor(Color.rgb(219, 255, 251));
+                textViewPriorityRead.setText(R.string.normal);
+                textViewPriorityRead.setTextColor(Color.rgb(0, 163, 243));
+                textViewTimeRead.setTextColor(Color.rgb(0, 163, 243));
+            }
+        } else {
+            super.onBackPressed();
         }
     }
 

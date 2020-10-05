@@ -11,4 +11,7 @@
     <string name="delete_note">Delete Note</string>
     <string name="app_version">1.0</string>
     <string name="app_description">This is an app for keeping track of notes.</string>
+    <string name="critical">Critical</string>
+    <string name="important">Important</string>
+    <string name="normal">Normal</string>
 </resources>

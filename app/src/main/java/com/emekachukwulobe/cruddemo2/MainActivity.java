@@ -240,6 +240,7 @@ private CollectionReference notebookRef;
                                         .setAvailableProviders(Arrays.asList(
                                                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                                                 new AuthUI.IdpConfig.FacebookBuilder().build()))
+                                        .setLogo(R.drawable.ic_notebook)
                                         .build(),
                                 RC_SIGN_IN);
                     }

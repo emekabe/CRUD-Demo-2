@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +29,15 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private EditText editTextTitle;
     private EditText editTextDescription;
-    private NumberPicker numberPickerPriority;
 
     boolean wannaEdit;
     String editID;
+
+    RadioButton radioButtonNormal;
+    RadioButton radioButtonImportant;
+    RadioButton radioButtonCritical;
+
+    int priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +49,30 @@ public class NewNoteActivity extends AppCompatActivity {
 
         editTextTitle = findViewById(R.id.edit_text_title);
         editTextDescription = findViewById(R.id.edit_text_description);
-        numberPickerPriority = findViewById(R.id.number_picker_priority);
 
-        numberPickerPriority.setMinValue(1);
-        numberPickerPriority.setMaxValue(3);
+        radioButtonNormal = findViewById(R.id.radio_button_normal);
+        radioButtonImportant = findViewById(R.id.radio_button_important);
+        radioButtonCritical = findViewById(R.id.radio_button_critical);
 
         wannaEdit = false;
+
+        radioButtonNormal.setChecked(true);
 
         if (getIntent().getStringExtra("EXTRA_ID") != null){
             setTitle("Edit Note");
 
             editTextTitle.setText(getIntent().getStringExtra("EXTRA_TITLE"));
             editTextDescription.setText(getIntent().getStringExtra("EXTRA_DESCRIPTION"));
-            numberPickerPriority.setValue(getIntent().getIntExtra("EXTRA_PRIORITY",1));
+
+            priority = getIntent().getIntExtra("EXTRA_PRIORITY",1);
+
+            if (priority == 3){
+                radioButtonCritical.setChecked(true);
+            } else if (priority == 2){
+                radioButtonImportant.setChecked(true);
+            } else {
+                radioButtonNormal.setChecked(true);
+            }
 
             wannaEdit = true;
             editID = getIntent().getStringExtra("EXTRA_ID");
@@ -83,7 +100,14 @@ public class NewNoteActivity extends AppCompatActivity {
     private void saveNote() {
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
-        int priority = numberPickerPriority.getValue();
+
+        if (radioButtonCritical.isChecked()){
+            priority = 3;
+        } else if (radioButtonImportant.isChecked()){
+            priority = 2;
+        } else {
+            priority = 1;
+        }
 
         if (description.trim().isEmpty()){
             Toast.makeText(this, "Please enter description", Toast.LENGTH_SHORT).show();
@@ -121,5 +145,14 @@ public class NewNoteActivity extends AppCompatActivity {
         }
 
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (editTextDescription.getText().toString().trim().isEmpty()){
+            super.onBackPressed();
+        } else {
+            saveNote();
+        }
     }
 }

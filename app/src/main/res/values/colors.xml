@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#00A655</color>
     <color name="colorAccent">#00A3F3</color>
     <color name="note_background">#DBFFFB</color>
+
+
+    <color name="note_background_important">#FFFEDB</color>
+    <color name="text_important">#868A00</color>
+
+    <color name="note_background_critical">#FFDBDB</color>
+    <color name="text_critical">#F30000</color>
+
+
 </resources>

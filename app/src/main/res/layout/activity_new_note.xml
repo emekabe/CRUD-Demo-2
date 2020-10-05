@@ -62,10 +62,36 @@
             android:text="Priority"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-        <NumberPicker
-            android:id="@+id/number_picker_priority"
+        <RadioGroup
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_button_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/normal"
+                android:textColor="@color/colorAccent"
+                android:buttonTint="@color/colorAccent"/>
+
+            <RadioButton
+                android:id="@+id/radio_button_important"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/important"
+                android:textColor="@color/text_important"
+                android:buttonTint="@color/text_important"/>
+
+            <RadioButton
+                android:id="@+id/radio_button_critical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/critical"
+                android:textColor="@color/text_critical"
+                android:buttonTint="@color/text_critical"/>
+
+        </RadioGroup>
 
     </LinearLayout>
 
