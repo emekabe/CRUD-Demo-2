@@ -80,7 +80,8 @@ private CollectionReference notebookRef;
         assert user != null;
         notebookRef = db.collection("UserNotes").document(user.getUid()).collection("Notebook");
 
-        Query query = notebookRef.orderBy("priority", Query.Direction.DESCENDING);
+        Query query = notebookRef.orderBy("priority", Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class)
@@ -123,6 +124,7 @@ private CollectionReference notebookRef;
                 intent.putExtra("EXTRA_DESCRIPTION", note.getDescription());
                 intent.putExtra("EXTRA_PRIORITY", note.getPriority());
                 intent.putExtra("EXTRA_ID", id);
+                intent.putExtra("EXTRA_TIME", note.getDate().getTime());
 
                 startActivity(intent);
             }
@@ -203,6 +205,9 @@ private CollectionReference notebookRef;
                         .show();
             }
         });
+
+
+
 
 
 //        allNotesRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -12,6 +12,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DateFormat;
+
 public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.NoteHolder> {
 
     private OnItemClickListener listener;
@@ -31,6 +33,16 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
         holder.textViewTitle.setText(model.getTitle());
         holder.textViewDescription.setText(model.getDescription());
         holder.textViewPriority.setText(String.valueOf(model.getPriority()));
+//        holder.textViewTime.setText(String.valueOf(model.getDate().getTime()));
+
+        String mySpecialDTFormat = DateFormat.getTimeInstance(DateFormat.SHORT).format(model.getDate().getTime())
+                + " - "
+                + DateFormat.getDateInstance(DateFormat.MONTH_FIELD).format(model.getDate());
+
+        holder.textViewTime.setText(mySpecialDTFormat);
+
+
+
     }
 
     @NonNull
@@ -49,12 +61,14 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
         TextView textViewTitle;
         TextView textViewDescription;
         TextView textViewPriority;
+        TextView textViewTime;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
+            textViewTime = itemView.findViewById(R.id.text_view_time);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,6 +80,12 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
                 }
             });
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return getSnapshots().size();
+//        return super.getItemCount();
     }
 
     public interface OnItemClickListener{

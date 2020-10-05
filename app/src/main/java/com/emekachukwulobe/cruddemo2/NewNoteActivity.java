@@ -18,6 +18,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -104,6 +106,7 @@ public class NewNoteActivity extends AppCompatActivity {
             newNote.put("title", title);
             newNote.put("description", description);
             newNote.put("priority", priority);
+            newNote.put("date", new Date());
 
             noteRef.update(newNote);
 
@@ -113,7 +116,7 @@ public class NewNoteActivity extends AppCompatActivity {
                     .collection("UserNotes")
                     .document(user.getUid())
                     .collection("Notebook");
-            notebookRef.add(new Note(title, description, priority));
+            notebookRef.add(new Note(title, description, priority, new Date()));
             Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show();
         }
 

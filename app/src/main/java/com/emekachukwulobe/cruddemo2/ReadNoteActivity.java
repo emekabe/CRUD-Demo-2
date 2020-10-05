@@ -20,17 +20,25 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class ReadNoteActivity extends AppCompatActivity {
 
     TextView textViewTitleRead;
     TextView textViewPriorityRead;
     TextView textViewDescriptionRead;
+    TextView textViewTimeRead;
+
 
     String editID;
 
     String title;
     String description;
     int priority;
+    long timeStamp;
+
+    Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +50,25 @@ public class ReadNoteActivity extends AppCompatActivity {
         textViewTitleRead = findViewById(R.id.text_view_title_read);
         textViewPriorityRead = findViewById(R.id.text_view_priority_read);
         textViewDescriptionRead = findViewById(R.id.text_view_description_read);
+        textViewTimeRead = findViewById(R.id.text_view_time_read);
 
-        if (getIntent().getStringExtra("EXTRA_ID") != null){
+        if (getIntent().getStringExtra("EXTRA_ID") != null) {
             editID = getIntent().getStringExtra("EXTRA_ID");
 
             title = getIntent().getStringExtra("EXTRA_TITLE");
             description = getIntent().getStringExtra("EXTRA_DESCRIPTION");
             priority = getIntent().getIntExtra("EXTRA_PRIORITY",1);
+            timeStamp = getIntent().getLongExtra("EXTRA_TIME", 0);
 
             textViewTitleRead.setText(title);
             textViewDescriptionRead.setText(description);
-            textViewPriorityRead.setText(getIntent().getIntExtra("EXTRA_PRIORITY",1) + "");
+            textViewPriorityRead.setText(String.valueOf(priority));
+//            textViewTimeRead.setText(String.valueOf(timeStamp));
 
+            String mySpecialDTFormat = DateFormat.getTimeInstance(DateFormat.SHORT).format(timeStamp)
+                    + " - "
+                    + DateFormat.getDateInstance(DateFormat.MONTH_FIELD).format(timeStamp);
+            textViewTimeRead.setText(mySpecialDTFormat);
         }
     }
 
