@@ -10,7 +10,9 @@
     <string name="edit_note">Edit Note</string>
     <string name="delete_note">Delete Note</string>
     <string name="app_version">1.0</string>
-    <string name="app_description">This is an app for keeping track of notes.</string>
+    <string name="app_description">
+        This is an app for keeping track of notes. It was primarily developed as a project to illustrate the Create, Read, Update and Delete (CRUD) database operations with cloud firestore.\n\nFor help and questions, contact the developer on cachukwlobe@gmail.com, or call +2348106872636.
+    </string>
     <string name="critical">Critical</string>
     <string name="important">Important</string>
     <string name="normal">Normal</string>

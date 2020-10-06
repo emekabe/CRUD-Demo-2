@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,7 +30,7 @@ import java.util.Objects;
 
 public class NewNoteActivity extends AppCompatActivity {
 
-    private EditText editTextTitle;
+    private TextInputEditText editTextTitle;
     private EditText editTextDescription;
 
     boolean wannaEdit;
@@ -36,6 +39,8 @@ public class NewNoteActivity extends AppCompatActivity {
     RadioButton radioButtonNormal;
     RadioButton radioButtonImportant;
     RadioButton radioButtonCritical;
+
+    TextView textViewAuthor;
 
     int priority;
 
@@ -53,6 +58,15 @@ public class NewNoteActivity extends AppCompatActivity {
         radioButtonNormal = findViewById(R.id.radio_button_normal);
         radioButtonImportant = findViewById(R.id.radio_button_important);
         radioButtonCritical = findViewById(R.id.radio_button_critical);
+
+        textViewAuthor = findViewById(R.id.text_view_author);
+        textViewAuthor.setVisibility(View.INVISIBLE);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            textViewAuthor.setText("Author: " + user.getDisplayName());
+            textViewAuthor.setVisibility(View.VISIBLE);
+        }
 
         wannaEdit = false;
 

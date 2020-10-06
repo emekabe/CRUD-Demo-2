@@ -1,99 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="16dp"
     tools:context=".NewNoteActivity">
 
-
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/edit_text_title"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:theme="@style/InputTheme">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="@color/note_background"
                 android:hint="Title"
-                android:inputType="text"
-                android:padding="4dp" />
+                app:boxBackgroundColor="@color/note_background"
+                app:boxStrokeColor="@color/colorAccent">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:padding="16dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/edit_text_description"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/note_background"
-                android:gravity="top"
+                android:layout_height="wrap_content"
                 android:hint="Description"
-                android:inputType="textMultiLine"
-                android:maxHeight="400dp"
-                android:padding="4dp"
-                android:textAppearance="@android:style/TextAppearance.Medium" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:boxBackgroundColor="@color/note_background"
+                app:boxStrokeColor="@color/colorAccent">
 
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:maxHeight="500dp"
+                    android:padding="16dp"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_view_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Author: I'm the one" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Priority"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radio_button_normal"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/normal"
-                android:textColor="@color/colorAccent"
-                android:buttonTint="@color/colorAccent"/>
+                android:text="Priority"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/radio_button_important"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/important"
-                android:textColor="@color/text_important"
-                android:buttonTint="@color/text_important"/>
+                android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radio_button_critical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/critical"
-                android:textColor="@color/text_critical"
-                android:buttonTint="@color/text_critical"/>
+                <RadioButton
+                    android:id="@+id/radio_button_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorAccent"
+                    android:text="@string/normal"
+                    android:textColor="@color/colorAccent" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radio_button_important"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/text_important"
+                    android:text="@string/important"
+                    android:textColor="@color/text_important" />
+
+                <RadioButton
+                    android:id="@+id/radio_button_critical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/text_critical"
+                    android:text="@string/critical"
+                    android:textColor="@color/text_critical" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
 
-</LinearLayout>
+</ScrollView>
