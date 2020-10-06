@@ -6,6 +6,12 @@
     <item android:id="@+id/delete_all_notes"
         android:title="Delete all notes" />
 
+    <item android:id="@+id/sort_by_modified_time"
+        android:title="Sort by modified time" />
+
+    <item android:id="@+id/sort_by_priority"
+        android:title="Sort by priority" />
+
     <item android:id="@+id/about"
         android:title="About" />
 

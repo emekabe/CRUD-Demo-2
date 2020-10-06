@@ -110,12 +110,42 @@ public class ReadNoteActivity extends AppCompatActivity {
                 editNote();
                 finish();
                 return true;
+            case R.id.share_note:
+                shareNote();
+                return true;
             case R.id.delete_note:
                 deleteNote();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void shareNote() {
+        String authorDescription = "";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            authorDescription = "AUTHOR: " + user.getDisplayName();
+        }
+
+        if (title != null && description != null){
+
+            String sharedNote = title +
+                    "\n\n" +
+                    description +
+                    "\n\n\n" +
+                    authorDescription;
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, sharedNote);
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        } else {
+            Toast.makeText(this, "Couldn't share note", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void deleteNote() {

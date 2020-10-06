@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -45,10 +47,17 @@ private CollectionReference notebookRef;
 
     private static final int RC_SIGN_IN = 123;
 
+    FirestoreRecyclerOptions<Note> options1;
+    FirestoreRecyclerOptions<Note> options2;
+
+    ImageView imageViewNoteIllustration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        imageViewNoteIllustration = findViewById(R.id.image_view_note_illustration);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -81,19 +90,42 @@ private CollectionReference notebookRef;
         assert user != null;
         notebookRef = db.collection("UserNotes").document(user.getUid()).collection("Notebook");
 
-        Query query = notebookRef.orderBy("priority", Query.Direction.DESCENDING)
-                .orderBy("date", Query.Direction.DESCENDING);
+        Query query1 = notebookRef.orderBy("date", Query.Direction.DESCENDING);
+        Query query2 = notebookRef.orderBy("priority", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING);
 
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
+        options1 = new FirestoreRecyclerOptions.Builder<Note>()
+                .setQuery(query1, Note.class)
                 .build();
 
-        adapter = new NoteAdapter(options);
+        options2 = new FirestoreRecyclerOptions.Builder<Note>()
+                .setQuery(query2, Note.class)
+                .build();
+
+        adapter = new NoteAdapter(options1);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+                changeIllustrationVisibility();
+            }
+        });
+
+        recyclerView.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                changeIllustrationVisibility();
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+                changeIllustrationVisibility();
+            }
+        });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -163,6 +195,12 @@ private CollectionReference notebookRef;
             case R.id.delete_all_notes:
                 deleteAllNotes();
                 return true;
+            case R.id.sort_by_modified_time:
+                sortByModifiedTime();
+                return true;
+            case R.id.sort_by_priority:
+                sortByPriority();
+                return true;
             case R.id.about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -172,6 +210,14 @@ private CollectionReference notebookRef;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void sortByModifiedTime() {
+        adapter.updateOptions(options1);
+    }
+
+    private void sortByPriority() {
+        adapter.updateOptions(options2);
     }
 
     private void deleteAllNotes() {
@@ -300,5 +346,14 @@ private CollectionReference notebookRef;
             finish();
         }
         super.onBackPressed();
+    }
+
+
+    private void changeIllustrationVisibility(){
+        if (adapter.getItemCount() > 0 && adapter != null) {
+            imageViewNoteIllustration.setVisibility(View.INVISIBLE);
+        } else {
+            imageViewNoteIllustration.setVisibility(View.VISIBLE);
+        }
     }
 }
