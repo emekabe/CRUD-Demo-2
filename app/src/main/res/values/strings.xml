@@ -17,4 +17,12 @@
     <string name="important">Important</string>
     <string name="normal">Normal</string>
     <string name="share_note">Share Note</string>
+
+    <string name="manage_account">Manage Account</string>
+
+    <string name="header_title">Header title</string>
+    <string name="header_subtitle">Header subtitle</string>
+    <string name="header_description">Header description</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

@@ -2,7 +2,11 @@ package com.emekachukwulobe.cruddemo2;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -25,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -38,7 +45,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 //    private CollectionReference notebookRef = db.collection("Notebook");
 private CollectionReference notebookRef;
@@ -52,16 +61,41 @@ private CollectionReference notebookRef;
 
     ImageView imageViewNoteIllustration;
 
+    TextView profileNameTextView;
+    TextView profileEmailTextView;
+    CircleImageView profileImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         imageViewNoteIllustration = findViewById(R.id.image_view_note_illustration);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View navHeader = navigationView.getHeaderView(0);
+        profileNameTextView = navHeader.findViewById(R.id.profile_name);
+        profileEmailTextView = navHeader.findViewById(R.id.profile_email);
+        profileImageView = navHeader.findViewById(R.id.profile_image);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
+
+            // Show user info on the nav menu
+            updateNavHeaderViews();
+
             FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
             buttonAddNote.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,6 +116,23 @@ private CollectionReference notebookRef;
                             .setLogo(R.drawable.ic_notebook)
                             .build(),
                     RC_SIGN_IN);
+        }
+    }
+
+    private void updateNavHeaderViews() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        profileNameTextView.setText(user.getDisplayName());
+        profileEmailTextView.setText(user.getEmail());
+
+        // TODone: Load profile Image
+        try {
+            Glide.with(this)
+                    .load(user.getPhotoUrl())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_account_white)
+                    .into(profileImageView);
+        } catch (Exception e){
+            Toast.makeText(this, "Could not load an image", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -306,6 +357,8 @@ private CollectionReference notebookRef;
                 if (user != null)
                     Toast.makeText(this, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
+                updateNavHeaderViews();
+
 
                 // todo function it!
                 // From the on create
@@ -345,7 +398,13 @@ private CollectionReference notebookRef;
         if (FirebaseAuth.getInstance().getCurrentUser() == null){
             finish();
         }
-        super.onBackPressed();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+//        super.onBackPressed();
     }
 
 
@@ -356,4 +415,31 @@ private CollectionReference notebookRef;
             imageViewNoteIllustration.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_create_note:
+                startActivity(new Intent(MainActivity.this, NewNoteActivity.class));
+                break;
+
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+
+            case R.id.nav_exit:
+                finish();
+                break;
+
+            case R.id.nav_sign_out:
+                signOut();
+                break;
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
 }
